@@ -17,4 +17,12 @@ def add_user(user_data):
     with open(USERS_PATH, 'w') as file:
         json.dump(data, file, indent = 4)
 
-# user = {"name": "Kacper", "surname": "Zielinski", "pesel": "04211507457", "nip": "0224111111", "regon": "380186266"}
+def generate_user_id() -> int:
+    """Generate unique ID for the user"""
+    if not os.path.exists(USERS_PATH):
+        return 1
+    data = load_users()
+    max_id = max([user["user_id"] for user in data])
+    return max_id + 1
+
+# user = {"user_name": "Kacper", "user_surname": "Zielinski", "user_pesel": "04211507457", "user_nip": "0224111111", "user_regon": "380186266", "user_id": 43}
