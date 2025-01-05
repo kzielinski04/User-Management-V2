@@ -50,6 +50,14 @@ def edit_user(user_id: int, updated_data: dict):
     with open(USERS_PATH, 'w') as file:
         json.dump(data, file, indent = 4)
 
+def remove_user(user_id: int):
+    """Remove user's data from users.json"""
+    data = load_users()
+    updated_data = [user for user in data if user["user_id"] != user_id]
+    if len(data) != len(updated_data):
+        with open(USERS_PATH, 'w') as file:
+            json.dump(updated_data, file, indent = 4)
+    else:
+        raise Exception("User not found!")
 
-# user = {"user_name": "Karol", "user_surname": "Jachimiak", "user_pesel": "042121507457", "user_nip": "0221111114111111", "user_regon": "38ssss0186266"}
-# edit_user(1, user)
+# user = {"user_name": "Wiesiek", "user_surname": "Kałdunow", "user_pesel": "042121507457", "user_nip": "0221111114111111", "user_regon": "38ssss0186266"}
