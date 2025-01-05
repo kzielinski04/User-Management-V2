@@ -1,4 +1,4 @@
-import re, random, os, json
+import re, random, os, json, string
 
 USERS_PATH = "data/users.json"
 
@@ -106,8 +106,15 @@ def remove_user(user_id: int):
     else:
         raise Exception("User not found!")
 
-# def generate_password() -> str:
-    
-# user = {"user_name": "Wiesiek", "user_surname": "Kałdunow", "user_pesel": "042121507457", "user_nip": "0221111114111111", "user_regon": "38ssss0186266"}
-
-# validate_nip("0224111111")
+def generate_password() -> str:
+    """Generate a random strong password"""
+    chars = [l for l in string.ascii_letters] + [d for d in string.digits] + [p for p in string.punctuation]
+    password_length = random.randint(12, 20)
+    password = ""
+    while len(password) != password_length:
+        char = random.choice(chars)
+        password += char
+    if re.match(r".*[A-Za-z]+.*", password) and re.match(r".*[\d].*", password) and re.match(r".*[~`! @#$%^&*()_\-+={[}]|:;'<,>.?/\"\\].*", password):
+        return password
+    else:
+        generate_password()
