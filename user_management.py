@@ -7,6 +7,8 @@ def validate_nip(nip: str) -> bool:
     length = 10
     if len(nip) != length:
         return False
+    if re.match(r".*[\D].*", nip):
+        return False
     control_digit = int(nip[length - 1])
     wages = [6, 5, 7, 2, 3, 4, 5, 6, 7]
     nip = [int(num) for num in nip]
@@ -17,6 +19,8 @@ def validate_pesel(pesel: str) -> bool:
     """Validate user's PESEL"""
     length = 11
     if len(pesel) != length:
+        return False
+    if re.match(r".*[\D].*", pesel):
         return False
     control_digit = int(pesel[length - 1])
     wages = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3]
@@ -40,6 +44,8 @@ def validate_regon(regon: str) -> bool:
     length = len(regon)
     if length not in {9, 14}:
         return False
+    if re.match(r".*[\D].*", regon):
+        return False
     control_digit = int(regon[length - 1])
     regon = [int(num) for num in regon]
     match length:
@@ -62,6 +68,8 @@ def load_users():
     
 def add_user(user_data: dict):
     """Add new user to users.json"""
+    if not (validate_nip(user_data["user_nip"]) and validate_pesel(user_data["user_pesel"]) and validate_regon(user_data["user_regon"])):
+        return False
     user_id = generate_user_id()
     user_data.update({"user_id": user_id})
     data = load_users()
@@ -98,4 +106,8 @@ def remove_user(user_id: int):
     else:
         raise Exception("User not found!")
 
+# def generate_password() -> str:
+    
 # user = {"user_name": "Wiesiek", "user_surname": "Kałdunow", "user_pesel": "042121507457", "user_nip": "0221111114111111", "user_regon": "38ssss0186266"}
+
+# validate_nip("0224111111")
