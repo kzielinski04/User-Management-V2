@@ -37,7 +37,20 @@ def validate_pesel(pesel: str) -> bool:
 
 def validate_regon(regon: str) -> bool:
     """Validate user's REGON"""
-    pass
+    length = len(regon)
+    if length not in {9, 14}:
+        return False
+    control_digit = int(regon[length - 1])
+    regon = [int(num) for num in regon]
+    match length:
+        case 9:
+            wages = [8, 9, 2, 3, 4, 5, 6, 7]
+        case 14:
+            wages = [2, 4, 8, 5, 0, 9, 7, 3, 6, 1, 2, 4, 8]
+    result = (sum([regon[i] * wages[i] for i in range(length - 1)])) % 11
+    if result % 10 == 0:
+        result = 0
+    return True if result == control_digit else False
 
 def load_users():
     """Load users data from users.json"""
@@ -86,5 +99,3 @@ def remove_user(user_id: int):
         raise Exception("User not found!")
 
 # user = {"user_name": "Wiesiek", "user_surname": "Kałdunow", "user_pesel": "042121507457", "user_nip": "0221111114111111", "user_regon": "38ssss0186266"}
-
-print(validate_pesel("04211507457"))
