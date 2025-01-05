@@ -2,6 +2,18 @@ import re, random, os, json
 
 USERS_PATH = "data/users.json"
 
+def validate_nip(nip: str) -> bool:
+    """Validate user's NIP"""
+    pass
+
+def validate_pesel(pesel: str) -> bool:
+    """Validate user's PESEL"""
+    pass
+
+def validate_regon(regon: str) -> bool:
+    """Validate user's REGON"""
+    pass
+
 def load_users():
     """Load users data from users.json"""
     if not os.path.exists(USERS_PATH):
@@ -10,8 +22,10 @@ def load_users():
         data = json.load(file)
         return data
     
-def add_user(user_data):
-    """Add new user"""
+def add_user(user_data: dict):
+    """Add new user to users.json"""
+    user_id = generate_user_id()
+    user_data.update({"user_id": user_id})
     data = load_users()
     data.append(user_data)
     with open(USERS_PATH, 'w') as file:
@@ -25,4 +39,17 @@ def generate_user_id() -> int:
     max_id = max([user["user_id"] for user in data])
     return max_id + 1
 
-# user = {"user_name": "Kacper", "user_surname": "Zielinski", "user_pesel": "04211507457", "user_nip": "0224111111", "user_regon": "380186266", "user_id": 43}
+def edit_user(user_id: int, updated_data: dict):
+    """Edit data of the user from users.json"""
+    data = load_users()
+    if user_id not in [user["user_id"] for user in data]:
+        raise Exception("User not found!")
+    for user in data:
+        if user["user_id"] == user_id:
+            user.update(updated_data)
+    with open(USERS_PATH, 'w') as file:
+        json.dump(data, file, indent = 4)
+
+
+# user = {"user_name": "Karol", "user_surname": "Jachimiak", "user_pesel": "042121507457", "user_nip": "0221111114111111", "user_regon": "38ssss0186266"}
+# edit_user(1, user)
