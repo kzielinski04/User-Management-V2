@@ -4,8 +4,15 @@ USERS_PATH = "data/users.json"
 
 def validate_nip(nip: str) -> bool:
     """Validate user's NIP"""
-    pass
-
+    length = 10
+    if len(nip) != length:
+        return False
+    last_digit = int(nip[length - 1])
+    wages = [6, 5, 7, 2, 3, 4, 5, 6, 7]
+    nip = [int(num) for num in nip]
+    result = (sum([nip[i] * wages[i] for i in range(length - 1)])) % 11
+    return True if result == last_digit else False
+    
 def validate_pesel(pesel: str) -> bool:
     """Validate user's PESEL"""
     pass
@@ -61,3 +68,5 @@ def remove_user(user_id: int):
         raise Exception("User not found!")
 
 # user = {"user_name": "Wiesiek", "user_surname": "Kałdunow", "user_pesel": "042121507457", "user_nip": "0221111114111111", "user_regon": "38ssss0186266"}
+
+print(validate_nip("7743274359"))
